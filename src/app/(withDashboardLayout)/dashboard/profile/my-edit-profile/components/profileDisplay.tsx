@@ -59,12 +59,12 @@ const ProfileDisplay: React.FC = () => {
       <Box
         component="div"
         sx={{
-          width: { md: "50%", sm: "100%" },
+          width: { md: "50%", xs: "100%" },
           display: "flex",
           flexDirection: "column",
           boxShadow: 1,
           p: 5,
-          borderRadius: 10,
+          borderRadius: 7,
           mx: "auto",
           my: 5,
           gap: 2,
@@ -73,7 +73,11 @@ const ProfileDisplay: React.FC = () => {
         <Avatar
           src={data?.profilePhoto ?? ""}
           alt={data?.username ?? "User"}
-          sx={{ width: 150, height: 150, mx: "auto" }}
+          sx={{
+            width: { xs: 70, md: 120, lg: 150 },
+            height: { xs: 70, md: 120, lg: 150 },
+            mx: "auto",
+          }}
         />
         <Box>
           <Typography
@@ -129,7 +133,7 @@ const ProfileDisplay: React.FC = () => {
         <Button
           variant="contained"
           color="primary"
-          sx={{ color: "white", width: "50%", mx: "auto" }}
+          sx={{ color: "white", width: { xs: "100%", sm: "50%" }, mx: "auto" }}
           onClick={() => setModalOpen(true)}
         >
           Edit Profile
@@ -172,7 +176,7 @@ const ProfileDisplay: React.FC = () => {
               sx={{
                 margin: "10px 0px",
                 color: "primary.main",
-                width: "50%",
+                width: { xs: "100%", sm: "50%" },
                 mx: "auto",
                 ml: 1,
               }}

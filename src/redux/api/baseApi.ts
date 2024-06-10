@@ -6,7 +6,7 @@ import { tagTypesList } from "../tag-types";
 export const baseApi = createApi({
   reducerPath: "api",
   baseQuery: axiosBaseQuery({
-    baseUrl: "https://flat-mate.netlify.app/api/v1",
+    baseUrl: "https://flat-sharing-backend-mauve.vercel.app/api/v1",
   }),
   endpoints: () => ({}),
   tagTypes: tagTypesList,
