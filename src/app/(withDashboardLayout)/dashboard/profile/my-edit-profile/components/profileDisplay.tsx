@@ -46,11 +46,11 @@ const ProfileDisplay: React.FC = () => {
         toast.success("Profile updated successfully!");
         setModalOpen(false);
       } else {
-        toast.error("Error updating profile");
+        toast.error("Error updating profile try");
       }
     } catch (err: any) {
       console.error(err.message);
-      toast.error("Error updating profile");
+      toast.error("Error updating profile catch");
     }
   };
 
