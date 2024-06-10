@@ -39,12 +39,14 @@ const ManageUsers = () => {
     pageCount = Math.ceil(meta.total / limit);
   }
   const handleStatusChange = async (id: string, currentStatus: string) => {
+    console.log({ id, currentStatus });
     const newStatus =
       currentStatus === USER_STATUS.ACTIVE
         ? USER_STATUS.BLOCKED
         : USER_STATUS.ACTIVE;
 
     const res = await changeUserStatus({ id: id, status: newStatus });
+    console.log(res);
   };
 
   const handleRoleChange = async (id: string, currentRole: string) => {

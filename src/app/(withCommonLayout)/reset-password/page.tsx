@@ -14,10 +14,8 @@ import { authKey } from "@/contants/authkey";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { deleteCookies } from "@/services/actions/deleteCookies";
+import { validationSchema } from "./components/validation";
 
-const validationSchema = z.object({
-  password: z.string().min(6, "Must be at least 6 characters long"),
-});
 const ResetPassword = () => {
   const searchParams = useSearchParams();
   const id = searchParams.get("userId");

@@ -26,6 +26,7 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import LogoutIcon from "@mui/icons-material/Logout";
 import assets from "@/assets";
 import Image from "next/image";
+import { useGetSingleUserQuery } from "@/redux/api/userApi";
 
 const Navbar = () => {
   const [userMenuAnchor, setUserMenuAnchor] = useState<null | HTMLElement>(
@@ -34,6 +35,8 @@ const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isUserLoggedIn, setIsUserLoggedIn] = useState<boolean>(false);
   const router = useRouter();
+
+  const { data } = useGetSingleUserQuery({});
 
   useEffect(() => setIsUserLoggedIn(isLoggedIn() as boolean), []);
 
@@ -215,9 +218,9 @@ const Navbar = () => {
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleUserMenuOpen} sx={{ p: 0 }}>
                     <Avatar
-                      sx={{ width: 60, height: 60 }}
+                      sx={{ width: 50, height: 50 }}
                       alt="User Avatar"
-                      src="https://shorturl.at/xSUyW"
+                      src={data?.profilePhoto || assets.images.avatar}
                     />
                   </IconButton>
                 </Tooltip>

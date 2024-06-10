@@ -24,20 +24,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import SPForm from "@/components/Forms/SPForm";
 import SPInput from "@/components/Forms/SPInput";
 import CircularProgress from "@mui/material/CircularProgress";
-
-export const userValidationSchema = z.object({
-  password: z.string().min(6, "Must be at least 6 characters"),
-  confirmPassword: z.string().min(6, "Must be at least 6 characters"),
-  username: z.string().min(1, "Please enter your name!"),
-  email: z.string().email("Please enter a valid email address!"),
-});
-
-export const defaultValues = {
-  username: "",
-  email: "",
-  password: "",
-  confirmPassword: "",
-};
+import { defaultValues, userValidationSchema } from "./components/validation";
 
 const RegisterPage = () => {
   const router = useRouter();

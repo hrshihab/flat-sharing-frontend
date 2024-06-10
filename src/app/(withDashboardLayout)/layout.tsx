@@ -1,14 +1,23 @@
-'use client';
-import DashboardDrawer from '@/components/Dashboard/DashboardDrawer/DashboardDrawer';
-import { isLoggedIn } from '@/services/auth.services';
-import { useRouter } from 'next/navigation';
+"use client";
+import { useEffect } from "react";
+import DashboardDrawer from "@/components/Dashboard/DashboardDrawer/DashboardDrawer";
+import { isLoggedIn } from "@/services/auth.services";
+import { useRouter } from "next/navigation";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
-   const router = useRouter();
-   if (!isLoggedIn()) {
-      return router.push('/login');
-   }
-   return <DashboardDrawer>{children} </DashboardDrawer>;
+  const router = useRouter();
+  useEffect(() => {
+    if (!isLoggedIn()) {
+      router.push("/login");
+    }
+  }, [router]);
+
+  // Optionally, add a loading state or a fallback UI
+  if (!isLoggedIn()) {
+    return <div>Loading...</div>;
+  }
+
+  return <DashboardDrawer>{children}</DashboardDrawer>;
 };
 
 export default DashboardLayout;

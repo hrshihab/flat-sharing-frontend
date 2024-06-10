@@ -8,7 +8,7 @@ type TInputProps = {
   size?: "small" | "medium";
   fullWidth?: boolean;
   sx?: SxProps;
-  readOnly?: boolean;
+  //readOnly?: boolean;
   placeholder?: string;
   required?: boolean;
   defaultValue?: string | number;
@@ -21,7 +21,7 @@ const SPInput = ({
   size = "small",
   fullWidth,
   sx,
-  readOnly = false,
+  //readOnly = false,
   required,
   defaultValue = "",
 }: TInputProps) => {
@@ -45,9 +45,9 @@ const SPInput = ({
           required={required}
           error={!!error?.message}
           helperText={error?.message}
-          InputProps={{
-            readOnly: readOnly,
-          }}
+          // InputProps={{
+          //   readOnly: readOnly,
+          // }}
         />
       )}
     />

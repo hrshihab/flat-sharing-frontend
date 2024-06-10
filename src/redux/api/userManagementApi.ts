@@ -16,8 +16,8 @@ export const manageUserApi = baseApi.injectEndpoints({
       query: ({ id, status }) => {
         //console.log(status, "redux api");
         return {
-          url: `/user/editProfile`,
-          method: "PUT",
+          url: `/user/editstatus`,
+          method: "PATCH",
           data: { id, status },
           contentType: "multipart/form-data",
         };
@@ -28,8 +28,8 @@ export const manageUserApi = baseApi.injectEndpoints({
       query: ({ id, role }) => {
         //console.log(role, "redux api role change");
         return {
-          url: `/user/editProfile`,
-          method: "PUT",
+          url: `/user/editstatus`,
+          method: "PATCH",
           data: { id, role },
           contentType: "multipart/form-data",
         };

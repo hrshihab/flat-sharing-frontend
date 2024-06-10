@@ -8,7 +8,6 @@ import {
   useGetAllFlatBookingsQuery,
   useUpdateFlatRequestStatusMutation,
 } from "@/redux/api/flatRequest";
-import CheckCircleOutlinedIcon from "@mui/icons-material/CheckCircleOutlined";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 
