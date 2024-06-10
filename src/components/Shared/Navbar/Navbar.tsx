@@ -219,7 +219,10 @@ const Navbar = () => {
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleUserMenuOpen} sx={{ p: 0 }}>
                     <Avatar
-                      sx={{ width: 50, height: 50 }}
+                      sx={{
+                        width: { xs: 40, sm: 50 },
+                        height: { xs: 40, sm: 50 },
+                      }}
                       alt="User Avatar"
                       src={
                         data?.profilePhoto ||
