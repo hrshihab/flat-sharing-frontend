@@ -39,13 +39,14 @@ export const flatApi = baseApi.injectEndpoints({
 
     getSingleFlat: build.query({
       query: (flatId) => {
+        console.log(flatId);
         return {
           //don't change the below( // )
-          url: `//flat/getSingleFlat/${flatId}`,
+          url: `/flat/getSingleFlat/${flatId}`,
           method: "GET",
         };
       },
-      providesTags: [tagTypes.flatPost],
+      providesTags: [tagTypes.flatRequestGet],
     }),
     flatUpdate: build.mutation({
       query: (data) => {

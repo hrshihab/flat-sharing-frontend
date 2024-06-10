@@ -28,7 +28,9 @@ import FmdGoodOutlinedIcon from "@mui/icons-material/FmdGoodOutlined";
 import KingBedOutlinedIcon from "@mui/icons-material/KingBedOutlined";
 
 const FlatDetailsPage = ({ params }: any) => {
+  console.log("params", params);
   const { data, isLoading, error } = useGetSingleFlatQuery(params.flatId);
+  console.log("data", data);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 

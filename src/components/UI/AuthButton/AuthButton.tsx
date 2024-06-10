@@ -23,11 +23,16 @@ const AuthButton = () => {
       ) : (
         <Button
           variant="outlined"
-          sx={{ borderRadius: 5, boxShadow: 2, fontWeight: 600 }}
+          sx={{
+            borderRadius: 5,
+            boxShadow: 2,
+            fontWeight: { xs: 400, sm: 500, lg: 700 },
+            fontSize: { xs: "0.7rem", sm: "1rem", lg: "auto" },
+          }}
           component={Link}
           href="/login"
         >
-          Log in
+          LogIN
         </Button>
       )}
     </>

@@ -151,6 +151,7 @@ const Navbar = () => {
                 color: "primary.main",
                 display: "flex",
                 alignItems: "center",
+                fontSize: { xs: "0.9rem", sm: "1rem" },
               }}
             >
               <Image

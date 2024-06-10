@@ -2,6 +2,8 @@ import { FieldValues } from "react-hook-form";
 import setAccessToken from "./setAccessToken";
 
 export const userLogin = async (data: FieldValues) => {
+  console.log(data, "This is data");
+  console.log(process.env.NEXT_PUBLIC_BACKEND_API_URL, "This is URL");
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/auth/login`,

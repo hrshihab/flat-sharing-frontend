@@ -21,6 +21,7 @@ const LoginPage = () => {
   const handleLogin = async (values: FieldValues) => {
     try {
       setLoading(true);
+      console.log("values", values);
       const res = await userLogin(values);
       if (res?.data?.accessToken) {
         toast.success(res?.message);

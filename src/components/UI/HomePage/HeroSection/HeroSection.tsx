@@ -44,7 +44,7 @@ const HeroSection = () => {
           variant="h3"
           component="h3"
           fontWeight={600}
-          sx={{ fontSize: { xs: "2rem", md: "2rem", lg: "3rem" } }}
+          sx={{ fontSize: { xs: "1.5rem", sm: "2rem", lg: "3rem" } }}
         >
           Find Your Perfect
         </Typography>
@@ -52,7 +52,7 @@ const HeroSection = () => {
           variant="h2"
           component="h1"
           fontWeight={600}
-          sx={{ fontSize: { xs: "2rem", md: "2rem", lg: "3rem" } }}
+          sx={{ fontSize: { xs: "1.5rem", sm: "2rem", lg: "3rem" } }}
         >
           Flat Today
         </Typography>
@@ -61,7 +61,7 @@ const HeroSection = () => {
           component="h1"
           fontWeight={600}
           color="primary.main"
-          sx={{ fontSize: { xs: "2rem", md: "2rem", lg: "3rem" } }}
+          sx={{ fontSize: { xs: "1.5rem", sm: "2rem", lg: "3rem" } }}
         >
           Easy & Fast
         </Typography>
@@ -69,7 +69,7 @@ const HeroSection = () => {
           sx={{
             my: 4,
             width: "80%",
-            fontSize: { xs: "1rem", md: "1.25rem" },
+            fontSize: { xs: "0.8rem", sm: "1rem", md: "1.25rem" },
             textAlign: "justify",
             mx: { sm: "auto", xs: "auto", lg: "0" },
           }}
@@ -87,14 +87,24 @@ const HeroSection = () => {
           <Link href={`/dashboard`}>
             <Button
               variant="contained"
-              sx={{ color: "#ffff", fontStyle: "bold" }}
+              sx={{
+                color: "#ffff",
+                fontStyle: "bold",
+                fontSize: { xs: "0.5rem", sm: "1rem" },
+                width: { xs: "100%", sm: "auto" },
+              }}
             >
               Share Your Flat
             </Button>
           </Link>
 
           <Link href="/#contact-us">
-            <Button variant="outlined">Contact Us</Button>
+            <Button
+              sx={{ display: { xs: "none", sm: "block" } }}
+              variant="outlined"
+            >
+              Contact Us
+            </Button>
           </Link>
         </Box>
       </Box>
