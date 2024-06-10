@@ -154,7 +154,7 @@ const Navbar = () => {
               }}
             >
               <Image
-                src={assets.images.logo}
+                src="https://res.cloudinary.com/ddqr8la1c/image/upload/v1718021120/logo_tyw2c0.png"
                 alt="Logo"
                 style={{ marginRight: "10px" }}
                 width={40}
@@ -220,7 +220,10 @@ const Navbar = () => {
                     <Avatar
                       sx={{ width: 50, height: 50 }}
                       alt="User Avatar"
-                      src={data?.profilePhoto || assets.images.avatar}
+                      src={
+                        data?.profilePhoto ||
+                        "https://res.cloudinary.com/ddqr8la1c/image/upload/v1718021120/man_avatar_gldyf6.png"
+                      }
                     />
                   </IconButton>
                 </Tooltip>

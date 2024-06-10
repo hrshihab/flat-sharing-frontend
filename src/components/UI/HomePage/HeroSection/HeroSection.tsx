@@ -110,7 +110,10 @@ const HeroSection = () => {
       >
         <Box>
           <Image
-            src={assets.images.flat4}
+            src={
+              assets.images.flat4 ||
+              "https://res.cloudinary.com/ddqr8la1c/image/upload/v1718021144/bed_dz0bwa.png"
+            }
             width={700}
             height={700}
             alt="Flat Image"
