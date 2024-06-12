@@ -109,11 +109,11 @@ export default function FlatCard({ searchData }: { searchData: any }) {
                       }}
                     >
                       <Button
-                        onClick={() => setIsModalOpen(true)}
+                        //onClick={() => setIsModalOpen(true)}
                         variant="contained"
                         sx={{ color: "#fff" }}
                       >
-                        Book
+                        Book !
                       </Button>
                       <FlatShareModal
                         params={flat?.id}
