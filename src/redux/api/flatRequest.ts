@@ -5,6 +5,7 @@ export const flatRequestApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     flatRequestPost: build.mutation({
       query: (data) => {
+        console.log(data);
         return {
           url: "/flat-share/booking-requests",
           method: "POST",

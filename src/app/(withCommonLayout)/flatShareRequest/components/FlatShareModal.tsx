@@ -53,11 +53,12 @@ const FlatShareModal = ({ params, open, setOpen }: any) => {
   const handleFormSubmit = async (values: FieldValues) => {
     try {
       values["age"] = parseInt(values["age"]);
-      //console.log({ ...values, flatId: params.flatId });
+      console.log({ ...values, flatId: params.flatId });
       const res = await flatRequestPost({
         ...values,
         flatId: params.flatId,
       }).unwrap();
+      console.log(res);
       if (res?.id) {
         toast.success("Request submitted successfully");
         setOpen(false);
