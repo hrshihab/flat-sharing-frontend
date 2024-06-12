@@ -25,9 +25,7 @@ const flatBookingSchema = z.object({
     z.number().min(0, { message: "Age must be a positive number" })
   ),
   profession: z.string().nonempty({ message: "Profession is required" }),
-  maritalStatus: z.enum(["MARRIED", "SINGLE", "SEPERATED"], {
-    message: "Marital status is required",
-  }),
+  maritalStatus: z.string(),
   PresentAddress: z
     .string()
     .nonempty({ message: "Present Address is required" }),
@@ -56,6 +54,7 @@ const FlatShareModal = ({ params, open, setOpen }: any) => {
       console.log({ ...values, flatId: params.flatId });
       const res = await flatRequestPost({
         ...values,
+        maritalStatus: values.maritalStatus || "SINGLE",
         flatId: params.flatId,
       }).unwrap();
       console.log(res);
@@ -65,9 +64,10 @@ const FlatShareModal = ({ params, open, setOpen }: any) => {
       } else {
         toast.error("Failed to submit request");
       }
-      //console.log(res);
+      console.log(res);
     } catch (err: any) {
       console.error(err.message);
+      toast.error("Failed to submit request");
     }
   };
 
