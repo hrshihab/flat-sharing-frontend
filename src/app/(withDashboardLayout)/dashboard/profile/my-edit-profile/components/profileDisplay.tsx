@@ -7,6 +7,7 @@ import {
   Avatar,
   Button,
   CircularProgress,
+  Input,
 } from "@mui/material";
 import {
   useGetSingleUserQuery,
@@ -15,12 +16,11 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import SPInput from "@/components/Forms/SPInput";
 import SPForm from "@/components/Forms/SPForm";
-import SPFileUploader from "@/components/Forms/SPFileUploader";
 import { toast } from "sonner";
 import SPModal from "@/components/Shared/SPModal/SPModal";
-import { modifyPayload } from "@/utils/modifyPayload";
-import { UpdateProfileValues, updateProfileSchema } from "./validation";
 import { FieldValues } from "react-hook-form";
+import uploadImage from "@/utils/imageUploadToBB";
+import { UpdateProfileValues, updateProfileSchema } from "./validation";
 
 const defaultProfileValues: UpdateProfileValues = {
   username: "",
@@ -29,6 +29,9 @@ const defaultProfileValues: UpdateProfileValues = {
 };
 
 const ProfileDisplay: React.FC = () => {
+  const [photos, setPhotos] = useState<string[]>([]);
+  const [imageLoading, setImageLoading] = useState<boolean>(false);
+
   const { data, error, isLoading } = useGetSingleUserQuery({});
   const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation();
   const [isModalOpen, setModalOpen] = useState(false);
@@ -36,12 +39,52 @@ const ProfileDisplay: React.FC = () => {
   if (isLoading) return <Typography>Loading...</Typography>;
   if (error) return <Typography>Error loading user data</Typography>;
 
-  const handleProfileUpdate = async (values: FieldValues) => {
-    console.log("values", values);
+  const handleImageChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const selectedFiles = event.target.files;
+    if (!selectedFiles || selectedFiles.length === 0) {
+      console.log("No files selected");
+      return;
+    }
 
     try {
-      const formData = modifyPayload(values);
-      const res = await updateUser(formData).unwrap();
+      setImageLoading(true);
+      const uploadedPhotos: string[] = [];
+
+      for (let i = 0; i < selectedFiles.length; i++) {
+        const file = selectedFiles[i];
+        //console.log(file, "file");
+        const response = await uploadImage(file);
+        // console.log(response, "response");
+
+        if (response && response.imageUrl) {
+          uploadedPhotos.push(response.imageUrl);
+        } else {
+          console.log(`Failed to upload file: ${file.name}`);
+        }
+      }
+
+      setPhotos(uploadedPhotos);
+      setImageLoading(false);
+      //console.log(uploadedPhotos, "uploadedPhotos to state");
+    } catch (error) {
+      console.error(error, "comes from handleImageChange");
+      setImageLoading(false);
+    }
+  };
+
+  const handleProfileUpdate = async (values: FieldValues) => {
+    const formatData = {
+      username: values.username,
+      email: values.email,
+      profilePhoto: photos.length > 0 ? photos[0] : data?.profilePhoto || "",
+    };
+    //console.log("formatData", formatData);
+
+    try {
+      const res = await updateUser(formatData).unwrap();
+      //console.log("res", res);
       if (res?.id) {
         toast.success("Profile updated successfully!");
         setModalOpen(false);
@@ -164,11 +207,15 @@ const ProfileDisplay: React.FC = () => {
             name="email"
             required
           />
-          <SPFileUploader
-            sx={{ mx: "auto", my: 1 }}
-            name="file"
-            label="Upload Profile Photo"
+
+          <Input
+            type="file"
+            inputProps={{ multiple: true }}
+            onChange={handleImageChange}
+            required
           />
+
+          {imageLoading && <CircularProgress />}
           {isUpdating ? (
             <CircularProgress />
           ) : (

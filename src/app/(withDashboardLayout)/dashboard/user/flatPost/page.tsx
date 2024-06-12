@@ -1,5 +1,12 @@
 "use client";
-import { Box, Button, CircularProgress, Grid, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Grid,
+  Input,
+  Typography,
+} from "@mui/material";
 import { useState } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,9 +15,8 @@ import SPForm from "@/components/Forms/SPForm";
 import { FieldValues } from "react-hook-form";
 import { useFlatPostMutation } from "@/redux/api/flatApi";
 import { useRouter } from "next/navigation";
-import SPFileUploader from "@/components/Forms/SPFileUploader";
-import { modifyPayload } from "@/utils/modifyPayload";
 import { toast } from "sonner";
+import uploadImage from "@/utils/imageUploadToBB";
 
 const createFlatSchema = z.object({
   location: z.string({
@@ -32,7 +38,7 @@ const createFlatSchema = z.object({
   amenities: z.string({
     required_error: "Minimum 1 amenity is required!",
   }),
-  file: z.any(),
+  photos: z.any(),
 });
 
 type FlatFormValues = z.infer<typeof createFlatSchema>;
@@ -43,26 +49,59 @@ const defaultFlatValues: FlatFormValues = {
   rentAmount: 1000,
   bedrooms: 2,
   amenities: "",
-  file: [],
+  photos: [],
 };
 
 const PostFlat = () => {
   const router = useRouter();
   const [error, setError] = useState<string>("");
-  const [postFlat, { isLoading }] = useFlatPostMutation();
+  const [photos, setPhotos] = useState<{ imageUrl: string }[]>([]);
+  const [imageLoading, setImageLoading] = useState<boolean>(true);
 
-  const handleFlatPost = async (values: FieldValues) => {
-    //console.log(values, "values");
+  const [flatPost, { isLoading }] = useFlatPostMutation();
 
-    const data = modifyPayload(values);
-    //console.log(data, "data");
+  const handleImageChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const selectedFiles = event.target.files;
+    if (!selectedFiles) {
+      console.log("No files selected");
+      return;
+    }
 
     try {
-      const res = await postFlat(data).unwrap();
-      // console.log(res, "res");
+      const uploadedPhotos: { imageUrl: string }[] = [];
+      for (let i = 0; i < selectedFiles.length; i++) {
+        const file = selectedFiles[i];
+        //console.log(file, "file");
+        const response = await uploadImage(file);
+        //console.log(response, "response");
+        if (response) {
+          uploadedPhotos.push(response.imageUrl);
+        } else {
+          console.log(`Failed to upload file: ${file.name}`);
+        }
+      }
+      setPhotos(uploadedPhotos);
+      setImageLoading(false);
+      //console.log(uploadedPhotos, "uploadedPhotos"); // Log the uploaded photos
+    } catch (error) {
+      console.error(error, "comes from flat post");
+    }
+  };
+
+  const handleFlatPost = async (values: FieldValues) => {
+    values["amenities"] = values["amenities"].split(" ");
+    //console.log({ photos }, "photos"); // Log the photos before submitting the form
+
+    try {
+      const res = await flatPost({ ...values, photos }).unwrap();
+      //console.log(res, "res");
       if (res?.id) {
         toast.success("Flat created successfully!!");
-        //router.push("/flats");
+        router.push("/flats");
+      } else {
+        toast.error("Failed to create flat!!");
       }
     } catch (err: any) {
       console.error(err.message);
@@ -134,7 +173,12 @@ const PostFlat = () => {
             </Grid>
 
             <Grid item md={6} xs={12}>
-              <SPFileUploader name="file" label="Upload Files" />
+              <Input
+                type="file"
+                inputProps={{ multiple: true }}
+                onChange={handleImageChange}
+                required
+              />
             </Grid>
 
             {error && (

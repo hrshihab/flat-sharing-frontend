@@ -14,7 +14,7 @@ export const userApi = baseApi.injectEndpoints({
       query: (data) => ({
         url: "/user/editprofile",
         method: "PATCH",
-        contentType: "multipart/form-data",
+        contentType: "application/json",
         data,
       }),
       invalidatesTags: [tagTypes.user],

@@ -5,11 +5,12 @@ export const flatApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     flatPost: build.mutation({
       query: (data) => {
+        console.log(data);
         return {
           url: "/flat/create-flat",
           method: "POST",
           data,
-          contentType: "multipart/form-data",
+          contentType: "application/json",
         };
       },
       invalidatesTags: [tagTypes.flatPost],

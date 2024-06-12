@@ -36,8 +36,8 @@ instance.interceptors.response.use(
     const responseObject: ResponseSuccessType = {
       data: response?.data?.data,
       meta: response?.data?.meta,
-      statusCode: response?.data?.statusCode,
-      message: response?.data?.message,
+      //statusCode: response?.data?.statusCode,
+      //message: response?.data?.message,
     };
     return responseObject;
   },
