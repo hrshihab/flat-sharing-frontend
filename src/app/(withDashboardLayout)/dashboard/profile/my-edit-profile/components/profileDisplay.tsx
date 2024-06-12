@@ -31,13 +31,17 @@ const defaultProfileValues: UpdateProfileValues = {
 const ProfileDisplay: React.FC = () => {
   const [photos, setPhotos] = useState<string[]>([]);
   const [imageLoading, setImageLoading] = useState<boolean>(false);
+  const [isModalOpen, setModalOpen] = useState(false);
 
   const { data, error, isLoading } = useGetSingleUserQuery({});
   const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation();
-  const [isModalOpen, setModalOpen] = useState(false);
 
-  if (isLoading) return <Typography>Loading...</Typography>;
-  if (error) return <Typography>Error loading user data</Typography>;
+  useEffect(() => {
+    if (photos.length > 0) {
+      setImageLoading(false);
+    }
+    //console.log(photos, "photos after state update");
+  }, [photos]);
 
   const handleImageChange = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -66,21 +70,12 @@ const ProfileDisplay: React.FC = () => {
       }
 
       setPhotos(uploadedPhotos);
-
-      //console.log(uploadedPhotos, "uploadedPhotos to state");
     } catch (error) {
       console.error(error, "comes from handleImageChange");
+    } finally {
       setImageLoading(false);
     }
   };
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  useEffect(() => {
-    if (photos.length > 0) {
-      setImageLoading(false);
-    }
-    //console.log(photos, "photos after state update");
-  }, [photos]);
 
   const handleProfileUpdate = async (values: FieldValues) => {
     if (imageLoading) {
@@ -93,14 +88,15 @@ const ProfileDisplay: React.FC = () => {
       email: values.email,
       profilePhoto: photos[0],
     };
-    //console.log("formatData", formatData);
+    console.log("formatData", formatData);
 
     try {
       const res = await updateUser(formatData).unwrap();
-      //console.log("res", res);
+      console.log("res", res);
       if (res?.id) {
         toast.success("Profile updated successfully!");
         setModalOpen(false);
+        setPhotos([]); // Reset photos
       } else {
         toast.error("Error updating profile try");
       }
@@ -109,6 +105,9 @@ const ProfileDisplay: React.FC = () => {
       toast.error("Error updating profile catch");
     }
   };
+
+  if (isLoading) return <Typography>Loading...</Typography>;
+  if (error) return <Typography>Error loading user data</Typography>;
 
   return (
     <>
