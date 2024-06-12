@@ -11,9 +11,7 @@ import {
 export const storeUserInfo = ({ accessToken }: { accessToken: string }) => {
   return setToLocalStorage(authKey, accessToken);
 };
-// export const setRefreshToken = ({ refreshToken }: { refreshToken: string }) => {
-//   return setToLocalStorage("refreshToken", refreshToken);
-// };
+
 export const getUserInfo = () => {
   const authToken = getFromLocalStorage(authKey);
   //   console.log(authToken);

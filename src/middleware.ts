@@ -3,26 +3,19 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-type Role = "USER" | "ADMIN";
+type Role = keyof typeof roleBasedPrivateRoutes;
 
 const AuthRoutes = ["/login", "/register"];
 const commonPrivateRoutes = [
   "/dashboard",
   "/dashboard/change-password",
   "/doctors",
-  "/flatPost",
-  "/flatDetails",
-  "/flatShareRequest",
 ];
-
-const roleBasedPrivateRoutes: Record<Role, RegExp[]> = {
+const roleBasedPrivateRoutes = {
   USER: [/^\/dashboard\/user/],
   ADMIN: [/^\/dashboard\/admin/],
+  SUPER_ADMIN: [/^\/dashboard\/super-admin/],
 };
-
-interface DecodedData {
-  role?: Role;
-}
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -45,21 +38,21 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  let decodedData: DecodedData = {};
+  let decodedData = null;
 
   if (accessToken) {
-    try {
-      decodedData = jwtDecode<DecodedData>(accessToken);
-    } catch (error) {
-      return NextResponse.redirect(new URL("/login", request.url));
-    }
+    decodedData = jwtDecode(accessToken) as any;
   }
 
-  const role = decodedData.role;
+  const role = decodedData?.role;
 
-  if (role && roleBasedPrivateRoutes[role]) {
-    const routes = roleBasedPrivateRoutes[role];
-    if (routes.some((route) => route.test(pathname))) {
+  // if (role === 'ADMIN' && pathname.startsWith('/dashboard/admin')) {
+  //    return NextResponse.next();
+  // }
+
+  if (role && roleBasedPrivateRoutes[role as Role]) {
+    const routes = roleBasedPrivateRoutes[role as Role];
+    if (routes.some((route) => pathname.match(route))) {
       return NextResponse.next();
     }
   }
@@ -68,5 +61,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/login", "/register", "/dashboard/:path*"],
+  matcher: ["/login", "/register", "/dashboard/:page*", "/doctors/:page*"],
 };
