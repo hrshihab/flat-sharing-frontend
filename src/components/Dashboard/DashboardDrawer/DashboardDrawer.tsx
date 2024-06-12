@@ -94,11 +94,6 @@ export default function DashboardDrawer({
               </Typography>
             </Box>
             <Stack direction="row" gap={3}>
-              <Badge badgeContent={1} color="primary">
-                <IconButton sx={{ background: "#ffffff" }}>
-                  <NotificationsNoneIcon color="action" />
-                </IconButton>
-              </Badge>
               <Avatar alt={data?.name} src={data?.profilePhoto} />
               <AccountMenu />
             </Stack>
