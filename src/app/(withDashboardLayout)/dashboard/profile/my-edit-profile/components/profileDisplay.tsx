@@ -40,7 +40,6 @@ const ProfileDisplay: React.FC = () => {
     if (photos.length > 0) {
       setImageLoading(false);
     }
-    //console.log(photos, "photos after state update");
   }, [photos]);
 
   const handleImageChange = async (
@@ -58,9 +57,8 @@ const ProfileDisplay: React.FC = () => {
 
       for (let i = 0; i < selectedFiles.length; i++) {
         const file = selectedFiles[i];
-        //console.log(file, "file");
         const response = await uploadImage(file);
-        // console.log(response, "response");
+        console.log("Response from uploadImage:", response);
 
         if (response && response.imageUrl) {
           uploadedPhotos.push(response.imageUrl);
@@ -71,7 +69,7 @@ const ProfileDisplay: React.FC = () => {
 
       setPhotos(uploadedPhotos);
     } catch (error) {
-      console.error(error, "comes from handleImageChange");
+      console.error("Error during image upload:", error);
     } finally {
       setImageLoading(false);
     }
@@ -79,30 +77,28 @@ const ProfileDisplay: React.FC = () => {
 
   const handleProfileUpdate = async (values: FieldValues) => {
     if (imageLoading) {
-      //console.log("Images are still being uploaded. Please wait.");
       toast.warning("Images are still being uploaded. Please wait.");
       return;
     }
+
     const formatData = {
       username: values.username,
       email: values.email,
       profilePhoto: photos[0],
     };
-    console.log("formatData", formatData);
 
     try {
       const res = await updateUser(formatData).unwrap();
-      console.log("res", res);
       if (res?.id) {
         toast.success("Profile updated successfully!");
         setModalOpen(false);
         setPhotos([]); // Reset photos
       } else {
-        toast.error("Error updating profile try");
+        toast.error("Error updating profile");
       }
     } catch (err: any) {
-      console.error(err.message);
-      toast.error("Error updating profile catch");
+      console.error("Error updating profile:", err);
+      toast.error("Error updating profile");
     }
   };
 

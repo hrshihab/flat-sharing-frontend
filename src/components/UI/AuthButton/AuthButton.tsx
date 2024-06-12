@@ -32,7 +32,7 @@ const AuthButton = () => {
           component={Link}
           href="/login"
         >
-          LogIN
+          Login
         </Button>
       )}
     </>
