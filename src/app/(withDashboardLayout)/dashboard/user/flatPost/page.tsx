@@ -7,7 +7,7 @@ import {
   Input,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import SPInput from "@/components/Forms/SPInput";
@@ -55,8 +55,8 @@ const defaultFlatValues: FlatFormValues = {
 const PostFlat = () => {
   const router = useRouter();
   const [error, setError] = useState<string>("");
-  const [photos, setPhotos] = useState<{ imageUrl: string }[]>([]);
-  const [imageLoading, setImageLoading] = useState<boolean>(true);
+  const [photos, setPhotos] = useState<string[]>([]);
+  const [imageLoading, setImageLoading] = useState<boolean>(false);
 
   const [flatPost, { isLoading }] = useFlatPostMutation();
 
@@ -69,13 +69,12 @@ const PostFlat = () => {
       return;
     }
 
+    setImageLoading(true);
     try {
-      const uploadedPhotos: { imageUrl: string }[] = [];
+      const uploadedPhotos: string[] = [];
       for (let i = 0; i < selectedFiles.length; i++) {
         const file = selectedFiles[i];
-        //console.log(file, "file");
         const response = await uploadImage(file);
-        //console.log(response, "response");
         if (response) {
           uploadedPhotos.push(response.imageUrl);
         } else {
@@ -83,23 +82,35 @@ const PostFlat = () => {
         }
       }
       setPhotos(uploadedPhotos);
-      setImageLoading(false);
-      //console.log(uploadedPhotos, "uploadedPhotos"); // Log the uploaded photos
     } catch (error) {
       console.error(error, "comes from flat post");
     }
   };
 
+  useEffect(() => {
+    if (photos.length > 0) {
+      setImageLoading(false);
+    }
+    //console.log(photos, "photos after state update");
+  }, [photos]);
+
   const handleFlatPost = async (values: FieldValues) => {
+    if (imageLoading) {
+      //console.log("Images are still being uploaded. Please wait.");
+      toast.warning("Images are still being uploaded. Please wait.");
+      return;
+    }
+
     values["amenities"] = values["amenities"].split(" ");
-    //console.log({ photos }, "photos"); // Log the photos before submitting the form
+    console.log({ photos }, "photos"); // Log the photos before submitting the form
+    console.log({ ...values, photos }, "values"); // Log the form values before submitting the form
 
     try {
       const res = await flatPost({ ...values, photos }).unwrap();
-      //console.log(res, "res");
+      console.log(res, "res");
       if (res?.id) {
         toast.success("Flat created successfully!!");
-        router.push("/flats");
+        router.push("/dashboard/profile/my-flat-post");
       } else {
         toast.error("Failed to create flat!!");
       }
@@ -191,9 +202,9 @@ const PostFlat = () => {
             sx={{ margin: "10px 0px" }}
             fullWidth={true}
             type="submit"
-            disabled={isLoading}
+            disabled={isLoading || imageLoading}
           >
-            {isLoading ? (
+            {isLoading || imageLoading ? (
               <CircularProgress color={"success"} />
             ) : (
               <Typography component="p" color="white">
