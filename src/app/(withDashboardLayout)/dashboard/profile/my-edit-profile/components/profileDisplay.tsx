@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -66,7 +66,7 @@ const ProfileDisplay: React.FC = () => {
       }
 
       setPhotos(uploadedPhotos);
-      setImageLoading(false);
+
       //console.log(uploadedPhotos, "uploadedPhotos to state");
     } catch (error) {
       console.error(error, "comes from handleImageChange");
@@ -74,11 +74,24 @@ const ProfileDisplay: React.FC = () => {
     }
   };
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useEffect(() => {
+    if (photos.length > 0) {
+      setImageLoading(false);
+    }
+    //console.log(photos, "photos after state update");
+  }, [photos]);
+
   const handleProfileUpdate = async (values: FieldValues) => {
+    if (imageLoading) {
+      //console.log("Images are still being uploaded. Please wait.");
+      toast.warning("Images are still being uploaded. Please wait.");
+      return;
+    }
     const formatData = {
       username: values.username,
       email: values.email,
-      profilePhoto: photos.length > 0 ? photos[0] : data?.profilePhoto || "",
+      profilePhoto: photos[0],
     };
     //console.log("formatData", formatData);
 
@@ -227,6 +240,7 @@ const ProfileDisplay: React.FC = () => {
                 mx: "auto",
                 ml: 1,
               }}
+              disabled={isLoading || imageLoading}
               fullWidth={true}
               type="submit"
               variant="outlined"
