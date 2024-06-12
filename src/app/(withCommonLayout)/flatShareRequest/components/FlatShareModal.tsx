@@ -42,7 +42,7 @@ const FlatShareModal = ({ params, open, setOpen }: any) => {
       name: "",
       age: "",
       profession: "",
-      maritalStatus: "", // Initialize with empty string
+      maritalStatus: "SINGLE", // Initialize with empty string
       PresentAddress: "",
       phoneNo: "",
     },
@@ -94,7 +94,7 @@ const FlatShareModal = ({ params, open, setOpen }: any) => {
                   <Select
                     {...field}
                     label="Marital Status"
-                    value={field.value || ""}
+                    value={field.value || "SINGLE"}
                     onChange={field.onChange}
                   >
                     <MenuItem value="MARRIED">Married</MenuItem>
